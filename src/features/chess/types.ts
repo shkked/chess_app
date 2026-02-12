@@ -8,6 +8,9 @@ export type PieceType =
 
 export type PieceColor = "white" | "black"
 
-export interface IPiece {
-	img: string
+export interface Piece {
+	type: PieceType
+  color: PieceColor
 }
+
+export type Board = (Piece | null)[][]

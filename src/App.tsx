@@ -9,7 +9,7 @@ function App() {
 		<>
 			<div className="min-h-screen w-full bg-gray-900 flex flex-col">
 				<header className="flex items-center justify-between text-white p-4 text-center">
-					<div className="flex items-center gap-2 w-[500px]">
+					<div className="flex items-center gap-2">
 						<img className="w-6 h-6" src="logo.svg" alt="chess logo" />
 						<h1
 							onClick={redirectToMain}

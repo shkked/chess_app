@@ -1,53 +1,51 @@
-import type { PieceColor, PieceType } from "../types"
+import type { Board, PieceColor, PieceType } from "../types"
 
-export function PieceMapper(index: number) {
-	let PieceType: PieceType = "pawn"
-	let PieceColor: PieceColor = "white"
+const backRow: PieceType[] = [
+	"rook",
+	"knight",
+	"bishop",
+	"queen",
+	"king",
+	"bishop",
+	"knight",
+	"rook",
+]
 
-	// TODO вынести логику в отдельную функцию для белых и черных
-	if (index < 16) {
-		PieceColor = "white"
-		if (index >= 8) {
-			PieceType = "pawn"
-		}
-		if (index === 0 || index === 7) {
-			PieceType = "rook"
-		}
-		if (index === 1 || index === 6) {
-			PieceType = "knight"
-		}
-		if (index === 2 || index === 5) {
-			PieceType = "bishop"
-		}
-		if (index === 3) {
-			PieceType = "queen"
-		}
-		if (index === 4) {
-			PieceType = "king"
-		}
-	} else if (index >= 48) {
-		PieceColor = "black"
-		if (index < 56) {
-			PieceType = "pawn"
-		}
-		if (index === 56 || index === 63) {
-			PieceType = "rook"
-		}
-		if (index === 57 || index === 62) {
-			PieceType = "knight"
-		}
-		if (index === 58 || index === 61) {
-			PieceType = "bishop"
-		}
-		if (index === 59) {
-			PieceType = "queen"
-		}
-		if (index === 60) {
-			PieceType = "king"
-		}
-	} else {
-		return
+export function PiecePainter(
+	row: number,
+	col: number,
+): { type: PieceType; color: PieceColor } | undefined {
+	// Черные фигуры (верх доски)
+	if (row === 0) {
+		return { type: backRow[col], color: "black" as PieceColor }
 	}
 
-	return { PieceType, PieceColor }
+	if (row === 1) {
+		return { type: "pawn", color: "black" as PieceColor }
+	}
+
+	// Белые фигуры (низ доски)
+	if (row === 6) {
+		return { type: "pawn", color: "white" as PieceColor }
+	}
+
+	if (row === 7) {
+		return { type: backRow[col], color: "white" as PieceColor }
+	}
+
+	return
+}
+
+export function createInitialBoard(): Board {
+	const board: Board = Array.from({ length: 8 }, () => Array(8).fill(null))
+
+	backRow.forEach((type, col) => {
+		board[0][col] = { type, color: "black" }
+		board[1][col] = { type: "pawn", color: "black" }
+
+		board[7][col] = { type, color: "white" }
+		board[6][col] = { type: "pawn", color: "white" }
+	})
+	console.log(board)
+	return board
 }
