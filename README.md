@@ -1,73 +1,167 @@
-# React + TypeScript + Vite
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
-Currently, two official plugins are available:
+# Chess App
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+**React + TypeScript + Tailwind Chess Application**
 
-## React Compiler
+Шахматная веб-игра с управлением темой через React Context и маршрутизацией через React Router.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+---
 
-## Expanding the ESLint configuration
+## 🔹 Содержание
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- [Технологии](#технологии)  
+- [Структура проекта](#структура-проекта)  
+- [Установка и запуск](#установка-и-запуск)  
+- [Использование](#использование)  
+- [Архитектура](#архитектура)  
+- [Компоненты](#компоненты)  
+- [Theme Management](#theme-management)  
+- [Маршрутизация](#маршрутизация)  
+- [Будущее развитие](#будущее-развитие)  
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+---
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+## 🔹 Технологии
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+- React 19  
+- TypeScript  
+- Tailwind CSS  
+- React Router v6  
+- React Context API  
+- Vite  
+
+---
+
+## 🔹 Структура проекта
+
+```
+src/
+├── app/
+│   ├── providers/        # ThemeProvider и другие провайдеры
+│   └── layout/           # AppLayout, Header, Footer
+├── components/
+│   ├── chess/
+│   │   ├── Board.tsx
+│   │   ├── Square.tsx
+│   │   └── Piece.tsx
+│   └── ui/               # Повторно используемые UI-компоненты
+├── context/              # React Context (ThemeContext)
+├── hooks/                # Кастомные hooks (useTheme, etc.)
+├── features/
+│   └── chess/
+│       ├── logic/        # Генерация доски, валидатор ходов
+│       └── types.ts      # PieceType, PieceColor и другие типы
+├── pages/                # Страницы для React Router
+│   ├── HomePage.tsx
+│   ├── ChessPage.tsx
+│   └── SettingsPage.tsx
+├── styles/
+│   └── index.css         # Tailwind directives
+├── main.tsx
+└── App.tsx
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+---
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## 🔹 Установка и запуск
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+1. Клонировать репозиторий:
+
+```bash
+git clone https://github.com/your-username/chess-app.git
+cd chess-app
 ```
+
+2. Установить зависимости:
+
+```bash
+npm install
+```
+
+3. Запустить dev сервер:
+
+```bash
+npm run dev
+```
+
+4. Открыть в браузере:
+
+```
+http://localhost:5173
+```
+
+---
+
+## 🔹 Использование
+
+- Главная страница `/` — приветствие и навигация  
+- Игровая доска `/chess` — стартовая шахматная доска, кликаем по фигурам и перемещаем  
+- Настройки `/settings` — смена темы (светлая/тёмная) и будущие параметры  
+
+---
+
+## 🔹 Архитектура
+
+- **Board** — хранит состояние доски и выбранную фигуру  
+- **Square** — отвечает за клетку (цвет, подсветка, клик)  
+- **Piece** — отображение фигуры (Unicode или SVG)  
+- **ThemeProvider + ThemeContext** — управляет светлой/тёмной темой  
+- **React Router** — маршрутизация страниц SPA  
+- **features/chess/logic/board.ts** — генерация стартовой позиции и FEN (позже)  
+- **hooks/useTheme.ts** — удобный доступ к теме в компонентах  
+
+---
+
+## 🔹 Компоненты
+
+- **Board** — основной контейнер доски, 8x8 grid  
+- **Square** — клетка шахматной доски  
+- **Piece** — фигура (тип, цвет, анимации)  
+- **UI Components** — кнопки, карточки, иконки для интерфейса  
+
+---
+
+## 🔹 Theme Management
+
+- Тема хранится в **React Context**  
+- Provider оборачивает всё приложение  
+- Поддержка Tailwind dark mode (`<html class="dark">`)  
+- Hook `useTheme` позволяет переключать тему в компонентах  
+
+Пример использования:
+
+```tsx
+const { theme, toggleTheme } = useTheme()
+<button onClick={toggleTheme}>Сменить тему</button>
+```
+
+---
+
+## 🔹 Маршрутизация
+
+- Реализована через React Router v6  
+- Используются `<Routes>` и `<Route>`  
+- `<Link>` и `<NavLink>` для навигации SPA без перезагрузки  
+
+Пример маршрутов:
+
+```tsx
+<Routes>
+  <Route path="/" element={<HomePage />} />
+  <Route path="/chess" element={<ChessPage />} />
+  <Route path="/settings" element={<SettingsPage />} />
+</Routes>
+```
+
+---
+
+## 🔹 Будущее развитие
+
+- Поддержка **FEN строк** для загрузки и сохранения партий  
+- Проверка валидных ходов и шах/мат  
+- Drag & Drop для фигур  
+- Онлайн мультиплеер (WebSocket)  
+- Таймер партий, история ходов  
+- SVG фигуры и анимации  
+- Dark/Light темы с сохранением в `localStorage`  

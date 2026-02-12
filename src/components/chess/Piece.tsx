@@ -10,7 +10,9 @@ export default function Piece({ imgPiece, isDragging }: IPropsPiece) {
 				<img
 					src={imgPiece}
 					alt={imgPiece}
-					className={isDragging ? "opacity-50" : "opacity-100"}
+					className={`w-full h-full ${
+						isDragging ? "opacity-50" : "opacity-100"
+					}`}
 				/>
 			)}
 		</>

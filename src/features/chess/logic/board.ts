@@ -4,6 +4,7 @@ export function PieceMapper(index: number) {
 	let PieceType: PieceType = "pawn"
 	let PieceColor: PieceColor = "white"
 
+	// TODO вынести логику в отдельную функцию для белых и черных
 	if (index < 16) {
 		PieceColor = "white"
 		if (index >= 8) {
