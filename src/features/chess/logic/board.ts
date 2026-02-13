@@ -1,4 +1,4 @@
-import type { Board, PieceColor, PieceType } from "../types"
+import type { Board, PieceType } from "../types"
 
 const backRow: PieceType[] = [
 	"rook",
@@ -10,31 +10,6 @@ const backRow: PieceType[] = [
 	"knight",
 	"rook",
 ]
-
-export function PiecePainter(
-	row: number,
-	col: number,
-): { type: PieceType; color: PieceColor } | undefined {
-	// Черные фигуры (верх доски)
-	if (row === 0) {
-		return { type: backRow[col], color: "black" as PieceColor }
-	}
-
-	if (row === 1) {
-		return { type: "pawn", color: "black" as PieceColor }
-	}
-
-	// Белые фигуры (низ доски)
-	if (row === 6) {
-		return { type: "pawn", color: "white" as PieceColor }
-	}
-
-	if (row === 7) {
-		return { type: backRow[col], color: "white" as PieceColor }
-	}
-
-	return
-}
 
 export function createInitialBoard(): Board {
 	const board: Board = Array.from({ length: 8 }, () => Array(8).fill(null))

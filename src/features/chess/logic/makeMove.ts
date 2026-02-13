@@ -1,11 +1,18 @@
-import type { Board, Piece } from "../types"
+import type { Board, Move } from "../types"
 export default function makeMove(
-	$event: React.DragEvent<HTMLImageElement>,
 	board: Board,
-	row: number,
-	col: number,
-	piece: Piece,
-) {
-	// TODO доделать функцию
-	console.log("Making move for piece at", { $event, board, row, col, piece })
+	selected: Move | null,
+	to: Move,
+): Board {
+	console.log("Making move from", selected, "to", to)
+	if (!selected) return board
+
+	const newBoard = board.map(row => row.map(piece => piece))
+	const [row, col] = selected
+	const [toRow, toCol] = to
+	const piece = newBoard[row][col]
+	newBoard[row][col] = null
+	newBoard[toRow][toCol] = piece
+
+	return newBoard
 }

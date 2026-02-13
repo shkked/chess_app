@@ -4,24 +4,25 @@ interface IPropsPiece {
 	imgPiece: string
 	isDragging: boolean
 	onDragStart: React.DragEventHandler<HTMLImageElement> | undefined
-	onDrop: React.DragEventHandler<HTMLImageElement> | undefined
+	onClick: React.MouseEventHandler<HTMLImageElement>
 }
 
 export default function Piece({
 	imgPiece,
 	isDragging,
-	onDrop,
+	onClick,
 	onDragStart,
 }: IPropsPiece) {
 	return (
 		<>
 			{imgPiece && (
 				<img
+					onClick={onClick}
 					onDragStart={onDragStart}
-					onDrop={onDrop}
 					src={imgPiece}
 					alt={imgPiece}
-					className={`w-full h-full ${
+					draggable
+					className={`w-full h-full cursor-pointer ${
 						isDragging ? "opacity-50" : "opacity-100"
 					}`}
 				/>

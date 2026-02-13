@@ -1,10 +1,7 @@
+import { redirect } from "react-router-dom"
 import Board from "./components/chess/Board"
 
-function App() {
-	const redirectToMain = () => {
-		window.location.href = "/"
-	}
-
+export default function App() {
 	return (
 		<>
 			<div className="min-h-screen w-full bg-gray-900 flex flex-col">
@@ -12,7 +9,7 @@ function App() {
 					<div className="flex items-center gap-2">
 						<img className="w-6 h-6" src="logo.svg" alt="chess logo" />
 						<h1
-							onClick={redirectToMain}
+							onClick={() => redirect("/")}
 							className="text-xl font-bold cursor-pointer"
 						>
 							Space Chess
@@ -35,5 +32,3 @@ function App() {
 		</>
 	)
 }
-
-export default App
