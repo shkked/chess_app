@@ -5,6 +5,33 @@ export default function getQueenMoves(
 	col: number,
 	color: PieceColor,
 ): Move[] {
-	
+	const moves: Move[] = []
+
+	const directions = [
+		[1, 1],
+		[1, -1],
+		[-1, 1],
+		[-1, -1],
+		[1, 0],
+		[-1, 0],
+		[0, 1],
+		[0, -1],
+	]
+
+	directions.forEach(([dr, dc]) => {
+		let r = row + dr
+		let c = col + dc
+		
+		// Проверка на возможность хода
+		while (board[r]?.[c] === null) {
+			moves.push([r, c])
+			r += dr
+			c += dc
+		}
+		// Проверка на взятие фигуры
+		if (board[r]?.[c]?.color !== color) {
+			moves.push([r, c])
+		}
+	})
 	return moves
 }

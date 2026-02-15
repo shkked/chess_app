@@ -1,4 +1,9 @@
+import { isCheck, isCheckmate } from "../../features/chess/logic/isCheck"
 import makeMove from "../../features/chess/logic/makeMove"
+import {
+	playCheckSound,
+	playMoveSound,
+} from "../../features/chess/logic/playSounds"
 import type {
 	Board,
 	Piece as IPiece,
@@ -16,6 +21,8 @@ interface SquareProps {
 	setCurrentPlayer: React.Dispatch<React.SetStateAction<PieceColor>>
 	availableMoves: Move[]
 	setAvailableMoves: React.Dispatch<React.SetStateAction<Move[]>>
+	isChecked: boolean
+	setOpenModal: React.Dispatch<React.SetStateAction<boolean>>
 }
 export default function Square({
 	setSelected,
@@ -26,18 +33,34 @@ export default function Square({
 	setCurrentPlayer,
 	availableMoves,
 	setAvailableMoves,
+	setOpenModal,
 }: SquareProps) {
-	const startEngine = (row: number, col: number, piece: IPiece) => {
+	const startSelecting = (row: number, col: number, piece: IPiece) => {
 		if (board[row][col] === null) return
 		if (piece.color === currentPlayer) setSelected([row, col])
 	}
 
 	const tryMove = (row: number, col: number) => {
+		if (!selected) return
+
 		if (availableMoves.some(([r, c]) => r == row && c == col)) {
-			setBoard(makeMove(board, selected, [row, col]))
+			const newBoard = makeMove(board, selected, [row, col])
+
+			setBoard(newBoard)
 			setSelected(null)
 			setAvailableMoves([])
-			setCurrentPlayer(currentPlayer === "white" ? "black" : "white")
+
+			const nextPlayer = currentPlayer === "white" ? "black" : "white"
+
+			setCurrentPlayer(nextPlayer)
+
+			if (isCheckmate(newBoard, nextPlayer)) {
+				setOpenModal(true)
+			} else if (isCheck(newBoard, nextPlayer)) {
+				playCheckSound()
+			} else {
+				playMoveSound()
+			}
 		}
 	}
 
@@ -64,8 +87,8 @@ export default function Square({
 							>
 								{piece && (
 									<Piece
-										onClick={$event => startEngine(row, col, piece)}
-										onDragStart={$event => startEngine(row, col, piece)}
+										onClick={() => startSelecting(row, col, piece)}
+										onDragStart={() => startSelecting(row, col, piece)}
 										imgPiece={`/chess-pieces/${piece.color}/${piece.type}.png`}
 										isDragging={false}
 									/>

@@ -1,10 +1,10 @@
 
 
-# Chess App
+# Space Chess
 
 **React + TypeScript + Tailwind Chess Application**
 
-Шахматная веб-игра с управлением темой через React Context и маршрутизацией через React Router.
+Шахматы с управлением темой через React Context и маршрутизацией через React Router.
 
 ---
 

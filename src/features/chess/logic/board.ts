@@ -11,6 +11,10 @@ const backRow: PieceType[] = [
 	"rook",
 ]
 
+export function isInsideBoard(row: number, col: number) {
+	return row >= 0 && row < 8 && col >= 0 && col < 8
+}
+
 export function createInitialBoard(): Board {
 	const board: Board = Array.from({ length: 8 }, () => Array(8).fill(null))
 
@@ -21,6 +25,5 @@ export function createInitialBoard(): Board {
 		board[7][col] = { type, color: "white" }
 		board[6][col] = { type: "pawn", color: "white" }
 	})
-	console.log(board)
 	return board
 }

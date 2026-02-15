@@ -1,4 +1,6 @@
 import type { Board, Move, PieceColor } from "../../types"
+import { isInsideBoard } from "../board"
+
 export default function getPawnMoves(
 	board: Board,
 	row: number,
@@ -6,25 +8,36 @@ export default function getPawnMoves(
 	color: PieceColor,
 ): Move[] {
 	const moves: Move[] = []
-
 	const direction = color === "white" ? -1 : 1
 
+	const forwardRow = row + direction
+
 	// Ход вперед на одну клетку
-	if (!board[row + direction][col]) {
-		moves.push([row + direction, col])
-	}
-	// Ход вперед на две клетки
-	if (!board[row + direction][col] && (row === 1 || row === 6)) {
-		moves.push([row + 2 * direction, col])
+	if (isInsideBoard(forwardRow, col) && !board[forwardRow][col]) {
+		moves.push([forwardRow, col])
+
+		// Ход вперед на две клетки с начальной позиции
+		const startRow = color === "white" ? 6 : 1
+		const doubleForwardRow = row + 2 * direction
+		if (
+			row === startRow &&
+			isInsideBoard(doubleForwardRow, col) &&
+			!board[doubleForwardRow][col]
+		) {
+			moves.push([doubleForwardRow, col])
+		}
 	}
 
-	// Проверка на возможность съесть фигуру справа
-	if (board[row + direction][col + 1]) {
-		moves.push([row + direction, col + 1])
+	// Взятие по диагонали
+	for (const dc of [-1, 1]) {
+		const attackCol = col + dc
+		if (isInsideBoard(forwardRow, attackCol)) {
+			const target = board[forwardRow][attackCol]
+			if (target && target.color !== color) {
+				moves.push([forwardRow, attackCol])
+			}
+		}
 	}
-	// Проверка на возможность съесть фигуру слева
-	if (board[row + direction][col - 1]) {
-		moves.push([row + direction, col - 1])
-	}
+
 	return moves
 }

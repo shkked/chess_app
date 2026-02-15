@@ -5,7 +5,7 @@ export function MainRoutes() {
 	return (
 		<Router>
 			<Routes>
-				<Route path="/" element={App} />
+				<Route path="/" element={<App />} />
 				<Route path="/history" />
 			</Routes>
 		</Router>

@@ -1,20 +1,20 @@
 import type { Board } from "../types"
-import getPawnMoves from "./moves/getPawnMoves"
-import getRookMoves from "./moves/getRookMoves"
 import getBishopMoves from "./moves/getBishopMoves"
-import getKnightMoves from "./moves/getKnightMoves"
-import getQueenMoves from "./moves/getQueenMoves"
 import getKingMoves from "./moves/getKingMoves"
+import getKnightMoves from "./moves/getKnightMoves"
+import getPawnMoves from "./moves/getPawnMoves"
+import getQueenMoves from "./moves/getQueenMoves"
+import getRookMoves from "./moves/getRookMoves"
 
-export default function generateMoves(
+export default function generatePseudoMoves(
 	board: Board,
 	selected: [number, number],
 ) {
 	const selectedPiece = board[selected[0]][selected[1]]
+	if (!selectedPiece) return []
+
 	const PieceType = selectedPiece.type
 	const PieceColor = selectedPiece.color
-
-	if (!selectedPiece) return []
 
 	switch (PieceType) {
 		case "pawn":
@@ -34,8 +34,6 @@ export default function generateMoves(
 			break
 		case "king":
 			return getKingMoves(board, selected[0], selected[1], PieceColor)
-			break
-		default:
 			break
 	}
 }
