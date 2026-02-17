@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react"
-import { ThemeContext } from "../theme.context"
+import { ThemeContext } from "./theme.context"
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
 	const [theme, setTheme] = useState(
-		() => localStorage.getItem("theme") || "light",
+		() => localStorage.getItem("theme") || "dark",
 	)
 
 	useEffect(() => {

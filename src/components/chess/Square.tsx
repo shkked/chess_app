@@ -21,8 +21,9 @@ interface SquareProps {
 	setCurrentPlayer: React.Dispatch<React.SetStateAction<PieceColor>>
 	availableMoves: Move[]
 	setAvailableMoves: React.Dispatch<React.SetStateAction<Move[]>>
-	isChecked: boolean
 	setOpenModal: React.Dispatch<React.SetStateAction<boolean>>
+	isGameOver: boolean
+	setIsGameOver: React.Dispatch<React.SetStateAction<boolean>>
 }
 export default function Square({
 	setSelected,
@@ -33,7 +34,7 @@ export default function Square({
 	setCurrentPlayer,
 	availableMoves,
 	setAvailableMoves,
-	setOpenModal,
+	setIsGameOver,
 }: SquareProps) {
 	const startSelecting = (row: number, col: number, piece: IPiece) => {
 		if (board[row][col] === null) return
@@ -55,7 +56,7 @@ export default function Square({
 			setCurrentPlayer(nextPlayer)
 
 			if (isCheckmate(newBoard, nextPlayer)) {
-				setOpenModal(true)
+				setIsGameOver(true)
 			} else if (isCheck(newBoard, nextPlayer)) {
 				playCheckSound()
 			} else {

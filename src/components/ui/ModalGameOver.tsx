@@ -9,12 +9,14 @@ interface ModalProps {
 	openModal: boolean
 	setOpenModal: (value: boolean) => void
 	restartGame: () => void
+	currentPlayer: string
 }
 
 export default function ModalGameOver({
 	openModal,
 	setOpenModal,
 	restartGame,
+	currentPlayer,
 }: ModalProps) {
 	return (
 		<div>
@@ -37,7 +39,9 @@ export default function ModalGameOver({
 											as="h3"
 											className="text-base font-semibold text-white"
 										>
-											Вы проиграли
+											{currentPlayer === "white"
+												? "Черные выиграли"
+												: "Белые выиграли"}
 										</DialogTitle>
 										<div className="mt-2">
 											<p className="text-sm text-gray-400">
