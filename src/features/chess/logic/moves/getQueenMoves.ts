@@ -1,11 +1,11 @@
-import type { Board, Move, PieceColor } from "../../types"
+import type { Board, Position, PieceColor } from "../../types"
 export default function getQueenMoves(
 	board: Board,
 	row: number,
 	col: number,
 	color: PieceColor,
-): Move[] {
-	const moves: Move[] = []
+): Position[] {
+	const moves: Position[] = []
 
 	const directions = [
 		[1, 1],

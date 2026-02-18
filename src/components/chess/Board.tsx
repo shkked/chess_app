@@ -1,36 +1,36 @@
-import { useEffect, useState } from "react"
+import { memo, useEffect, useMemo, useState } from "react"
 import { createInitialBoard } from "../../features/chess/logic/board"
 import generateLegalMoves from "../../features/chess/logic/generateLegalMoves"
-import type { Board, Move, PieceColor } from "../../features/chess/types"
-import ModalGameOver from "../ui/ModalGameOver"
+import type { Board, PieceColor, Position } from "../../features/chess/types"
+import ModalEndGame from "../ui/ModalEndGame"
 import Square from "./Square"
 
 interface IBoardProps {
-	existingBoard: Board | null
-	existingPlayer: PieceColor | null
-	existingClass: any
+	existingBoard?: Board | null
+	existingPlayer?: PieceColor | null
+	classNameBoard?: string
+	sizesBoard?: string
 }
-export default function Board({
-	existingClass = "",
-	existingBoard = null ,
+export default memo(function Board({
+	existingBoard = null,
 	existingPlayer = null,
+	classNameBoard = "",
+	sizesBoard = "w-125 h-125",
 }: IBoardProps) {
 	const [board, setBoard] = useState(
 		existingBoard ? existingBoard : createInitialBoard(),
 	)
-	const [selected, setSelected] = useState<Move | null>(null)
+	const [selected, setSelected] = useState<Position | null>(null)
 	const [currentPlayer, setCurrentPlayer] = useState<PieceColor>(
 		existingPlayer ? existingPlayer : "white",
 	)
-	const [availableMoves, setAvailableMoves] = useState<Move[]>([])
 	const [openModal, setOpenModal] = useState(false)
 	const [isGameOver, setIsGameOver] = useState(false)
 
-	useEffect(() => {
-		if (!selected) return
+	const legalMoves = useMemo(() => {
+		if (!selected) return []
 
-		const moves = generateLegalMoves(board, selected, currentPlayer)
-		setAvailableMoves(moves)
+		return generateLegalMoves(board, selected, currentPlayer)
 	}, [board, selected, currentPlayer])
 
 	useEffect(() => {
@@ -48,29 +48,37 @@ export default function Board({
 		setCurrentPlayer("white")
 	}
 	return (
-		<div
-			className={`board_container ${existingClass} sm:w-125 sm:h-125 bg-gray-800 m-auto my-10 rounded-lg shadow-lg`}
-		>
-			<ModalGameOver
-				currentPlayer={currentPlayer}
-				openModal={openModal}
-				setOpenModal={() => setOpenModal(!openModal)}
-				restartGame={restartGame}
-			/>
+		<div>
+			<div
+				className={`${classNameBoard} ${
+					existingBoard ? "pointer-events-none" : ""
+				} sm:${sizesBoard} sm:${sizesBoard} bg-gray-800  rounded-lg shadow-lg`}
+			>
+				<ModalEndGame
+					currentPlayer={currentPlayer}
+					openModal={openModal}
+					setOpenModal={() => setOpenModal(!openModal)}
+					restartGame={restartGame}
+				/>
 
-			<Square
-				board={board}
-				setBoard={setBoard}
-				selected={selected}
-				setSelected={setSelected}
-				currentPlayer={currentPlayer}
-				setCurrentPlayer={setCurrentPlayer}
-				availableMoves={availableMoves}
-				setAvailableMoves={setAvailableMoves}
-				setOpenModal={setOpenModal}
-				isGameOver={isGameOver}
-				setIsGameOver={setIsGameOver}
-			/>
+				<Square
+					board={board}
+					setBoard={setBoard}
+					selected={selected}
+					setSelected={setSelected}
+					currentPlayer={currentPlayer}
+					setCurrentPlayer={setCurrentPlayer}
+					availableMoves={legalMoves}
+					setOpenModal={setOpenModal}
+					isGameOver={isGameOver}
+					setIsGameOver={setIsGameOver}
+				/>
+			</div>
+			{/* TODO добавить никнейм игрока */}
+			{/* <div className="flex items-center">
+
+				<p>Current player: {currentPlayer}</p>
+			</div> */}
 		</div>
 	)
-}
+})

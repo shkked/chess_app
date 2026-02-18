@@ -1,4 +1,5 @@
 import type React from "react"
+import { memo } from "react"
 
 interface IPropsPiece {
 	imgPiece: string
@@ -7,7 +8,7 @@ interface IPropsPiece {
 	onClick: React.MouseEventHandler<HTMLImageElement>
 }
 
-export default function Piece({
+export default memo(function Piece({
 	imgPiece,
 	isDragging,
 	onClick,
@@ -29,4 +30,4 @@ export default function Piece({
 			)}
 		</>
 	)
-}
+})

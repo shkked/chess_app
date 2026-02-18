@@ -1,4 +1,4 @@
-import type { Board, Move, PieceColor } from "../../types"
+import type { Board, Position, PieceColor } from "../../types"
 import { isInsideBoard } from "../board"
 
 export default function getPawnMoves(
@@ -6,8 +6,8 @@ export default function getPawnMoves(
 	row: number,
 	col: number,
 	color: PieceColor,
-): Move[] {
-	const moves: Move[] = []
+): Position[] {
+	const moves: Position[] = []
 	const direction = color === "white" ? -1 : 1
 
 	const forwardRow = row + direction

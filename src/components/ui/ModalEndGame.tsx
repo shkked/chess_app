@@ -12,7 +12,7 @@ interface ModalProps {
 	currentPlayer: string
 }
 
-export default function ModalGameOver({
+export default function ModalEndGame({
 	openModal,
 	setOpenModal,
 	restartGame,

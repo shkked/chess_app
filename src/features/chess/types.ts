@@ -15,4 +15,4 @@ export interface Piece {
 
 export type Board = (Piece | null)[][]
 
-export type Move = [number, number]
+export type Position = [number, number]

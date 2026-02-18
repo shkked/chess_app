@@ -1,3 +1,4 @@
+import { memo, useCallback } from "react"
 import { isCheck, isCheckmate } from "../../features/chess/logic/isCheck"
 import makeMove from "../../features/chess/logic/makeMove"
 import {
@@ -7,25 +8,24 @@ import {
 import type {
 	Board,
 	Piece as IPiece,
-	Move,
 	PieceColor,
+	Position,
 } from "../../features/chess/types"
 import Piece from "./Piece"
 
 interface SquareProps {
-	selected: Move | null
+	selected: Position | null
 	board: Board
 	setBoard: React.Dispatch<React.SetStateAction<Board>>
-	setSelected: React.Dispatch<React.SetStateAction<Move | null>>
+	setSelected: React.Dispatch<React.SetStateAction<Position | null>>
 	currentPlayer: PieceColor
 	setCurrentPlayer: React.Dispatch<React.SetStateAction<PieceColor>>
-	availableMoves: Move[]
-	setAvailableMoves: React.Dispatch<React.SetStateAction<Move[]>>
+	availableMoves: Position[]
 	setOpenModal: React.Dispatch<React.SetStateAction<boolean>>
 	isGameOver: boolean
 	setIsGameOver: React.Dispatch<React.SetStateAction<boolean>>
 }
-export default function Square({
+export default memo(function Square({
 	setSelected,
 	board,
 	setBoard,
@@ -33,37 +33,50 @@ export default function Square({
 	currentPlayer,
 	setCurrentPlayer,
 	availableMoves,
-	setAvailableMoves,
 	setIsGameOver,
 }: SquareProps) {
-	const startSelecting = (row: number, col: number, piece: IPiece) => {
-		if (board[row][col] === null) return
-		if (piece.color === currentPlayer) setSelected([row, col])
-	}
+	const startSelecting = useCallback(
+		(row: number, col: number, piece: IPiece) => {
+			if (board[row][col] === null) return
+			if (piece.color === currentPlayer) setSelected([row, col])
+		},
+		[board, currentPlayer, setSelected],
+	)
 
-	const tryMove = (row: number, col: number) => {
-		if (!selected) return
+	const tryMove = useCallback(
+		(row: number, col: number) => {
+			if (!selected) return
 
-		if (availableMoves.some(([r, c]) => r == row && c == col)) {
-			const newBoard = makeMove(board, selected, [row, col])
+			if (availableMoves.some(([r, c]) => r == row && c == col)) {
+				const newBoard = makeMove(board, selected, [row, col])
 
-			setBoard(newBoard)
-			setSelected(null)
-			setAvailableMoves([])
+				setBoard(newBoard)
+				setSelected(null)
 
-			const nextPlayer = currentPlayer === "white" ? "black" : "white"
+				const nextPlayer = currentPlayer === "white" ? "black" : "white"
 
-			setCurrentPlayer(nextPlayer)
+				setCurrentPlayer(nextPlayer)
 
-			if (isCheckmate(newBoard, nextPlayer)) {
-				setIsGameOver(true)
-			} else if (isCheck(newBoard, nextPlayer)) {
-				playCheckSound()
-			} else {
-				playMoveSound()
+				if (isCheckmate(newBoard, nextPlayer)) {
+					setIsGameOver(true)
+				} else if (isCheck(newBoard, nextPlayer)) {
+					playCheckSound()
+				} else {
+					playMoveSound()
+				}
 			}
-		}
-	}
+		},
+		[
+			selected,
+			availableMoves,
+			board,
+			setBoard,
+			setSelected,
+			currentPlayer,
+			setCurrentPlayer,
+			setIsGameOver,
+		],
+	)
 
 	return (
 		<div className="board w-full h-full grid grid-cols-8 grid-rows-8">
@@ -101,4 +114,4 @@ export default function Square({
 			)}
 		</div>
 	)
-}
+})

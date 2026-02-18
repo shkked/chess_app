@@ -21,7 +21,7 @@ export default function HeaderLayout({
 					</Link>
 				</div>
 				<div className="buttons_right">
-					<Link to="/">
+					<Link to="/new-game">
 						<button className="border border-black dark:border-white bg-emerald-700 hover:bg-emerald-400 dark:text-white py-2 px-4 rounded-3xl cursor-pointer mr-2">
 							New game
 						</button>

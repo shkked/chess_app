@@ -1,9 +1,9 @@
-import type { Board, Move, PieceColor } from "../types"
+import type { Board, PieceColor, Position } from "../types"
 import generateLegalMoves from "./generateLegalMoves"
 import generatePseudoMoves from "./generatePseudoMoves"
 
 export function isCheck(board: Board, currentPlayer: string): boolean {
-	let kingPosition: Move | null = null
+	let kingPosition: Position | null = null
 
 	// Находим позицию короля
 	for (let i = 0; i < 8; i++) {

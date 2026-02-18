@@ -1,9 +1,14 @@
-import type { Board, Move } from "../types"
+import type { Board, Position } from "../types"
 import generatePseudoMoves from "./generatePseudoMoves"
 import { isCheck } from "./isCheck"
 import makeMove from "./makeMove"
 
-export default function generateLegalMoves(board: Board, from: Move, player: string) {
+export default function generateLegalMoves(
+	board: Board,
+	from: Position,
+	player: string,
+) {
+	console.log("generateLegalMoves called")
 	const pseudoMoves = generatePseudoMoves(board, from)
 
 	return pseudoMoves.filter(move => {

@@ -1,8 +1,8 @@
-import type { Board, Move } from "../types"
+import type { Board, Position } from "../types"
 export default function makeMove(
 	board: Board,
-	selected: Move | null,
-	to: Move,
+	selected: Position | null,
+	to: Position,
 ): Board {
 	if (!selected) return board
 
